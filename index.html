@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#0f0f1a"/>
+<title>💸 Flip Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f0f1a;color:#f0f0f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.app{max-width:700px;margin:0 auto;padding:14px 12px 90px}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.logo{font-size:22px;font-weight:800}.sub{font-size:11px;color:#666;margin-top:2px}
+.btn-primary{background:#7c6fff;border-radius:10px;padding:10px 16px;color:#fff;font-weight:700;font-size:14px}
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:#1a1a2e;border-radius:12px;padding:4px}
+.tab{flex:1;padding:8px 0;font-size:12px;border-radius:9px;font-weight:600;background:transparent;color:#666}
+.tab.active{background:#7c6fff;color:#fff}
+.card{background:#1a1a2e;border-radius:12px;padding:14px;margin-bottom:12px}
+.card-title{font-size:11px;color:#666;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat{background:#1a1a2e;border-radius:12px;padding:14px 16px}
+.stat-label{font-size:11px;color:#666;margin-bottom:2px}
+.stat-value{font-size:20px;font-weight:800;line-height:1.2}
+.stat-sub{font-size:10px;color:#666;margin-top:2px}
+input,select{background:#222236;border:1px solid #2e2e4e;border-radius:8px;padding:9px 12px;color:#f0f0f0;width:100%;font-size:14px;font-family:inherit}
+.form-col{display:flex;flex-direction:column;gap:8px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.img-drop{border:2px dashed #2e2e4e;border-radius:10px;padding:14px;text-align:center;cursor:pointer;color:#666;font-size:13px;background:#222236;margin-top:4px}
+.img-drop img{max-height:100px;border-radius:8px;object-fit:cover}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.btn-sec{background:#222236;border-radius:10px;padding:10px;color:#999;font-weight:700;font-size:14px}
+.filters{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.pill{background:#1a1a2e;border-radius:20px;padding:6px 14px;color:#666;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.active{background:#7c6fff;color:#fff}
+.deal-card{background:#1a1a2e;border-radius:12px;padding:14px;display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.deal-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.deal-ph{width:64px;height:64px;border-radius:10px;background:#222236;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+.deal-info{flex:1;min-width:0}
+.deal-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deal-meta{font-size:11px;color:#666;margin:3px 0 5px}
+.deal-prices{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12px}
+.badge{border-radius:6px;padding:2px 7px;font-size:10px;font-weight:700;flex-shrink:0}
+.badge-sold{background:#14532d;color:#4ade80}
+.badge-active{background:#1e3a5f;color:#60a5fa}
+.deal-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.icon-btn{background:#222236;border-radius:7px;padding:5px 9px;font-size:13px}
+.green{color:#4ade80}.red{color:#f87171}.purple{color:#a78bfa}.yellow{color:#facc15}.muted{color:#999}.white{color:#f0f0f0}
+.empty{text-align:center;color:#555;margin-top:60px;font-size:14px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:80px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar{width:100%;background:#7c6fff;border-radius:4px 4px 0 0;min-height:4px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);border-radius:10px;padding:10px 20px;font-weight:700;font-size:13px;z-index:999;box-shadow:0 4px 20px #0008;display:none}
+.toast.ok{background:#14532d;color:#4ade80}
+.toast.err{background:#7f1d1d;color:#f87171}
+.progress-bg{background:#222236;border-radius:99px;height:14px;width:100%;margin:10px 0 6px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c6fff,#4ade80);transition:width 0.5s}
+.goal-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.goal-big{font-size:28px;font-weight:800;margin:6px 0}
+.goal-edit{background:#222236;border-radius:8px;padding:6px 12px;color:#999;font-size:12px;font-weight:600}
+.days-chip{display:inline-block;background:#222236;border-radius:8px;padding:4px 10px;font-size:11px;color:#999;margin-top:6px}
+.on-track{color:#4ade80;font-weight:700;font-size:13px}
+.off-track{color:#f87171;font-weight:700;font-size:13px}
+.milestone-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}
+.milestone-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+<div id="toast" class="toast"></div>
+
+<div class="header">
+  <div>
+    <div class="logo">💸 Flip Tracker</div>
+    <div class="sub" id="hdr-sub">0 affärer · 0 aktiva</div>
+  </div>
+  <button class="btn-primary" onclick="openForm()">+ Ny</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" id="tab-dashboard" onclick="setTab('dashboard')">📊 Dashboard</button>
+  <button class="tab" id="tab-deals" onclick="setTab('deals')">📦 Affärer</button>
+  <button class="tab" id="tab-goal" onclick="setTab('goal')">🎯 Mål</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="view-dashboard">
+  <div class="grid2">
+    <div class="stat"><div class="stat-label">Total vinst</div><div class="stat-value green" id="s-total">0 kr</div></div>
+    <div class="stat"><div class="stat-label">Sålda affärer</div><div class="stat-value" id="s-sold">0</div><div class="stat-sub" id="s-active">0 pågående</div></div>
+    <div class="stat"><div class="stat-label">Snittvinst</div><div class="stat-value purple" id="s-avg">0 kr</div></div>
+    <div class="stat"><div class="stat-label">Snitt ROI</div><div class="stat-value yellow" id="s-roi">0%</div></div>
+  </div>
+  <div class="card" id="best-card" style="display:none">
+    <div class="card-title">🏆 Bästa affären</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="best-img"></div>
+      <div><div id="best-name" style="font-weight:700;font-size:14px"></div><div id="best-profit" class="green" style="font-size:13px;font-weight:600"></div></div>
+    </div>
+  </div>
+  <div class="card" id="chart-card" style="display:none">
+    <div class="card-title">📈 Vinst per månad</div>
+    <div class="chart" id="chart"></div>
+  </div>
+  <div class="card" id="platform-card" style="display:none">
+    <div class="card-title">🏪 Per plattform</div>
+    <div id="platform-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔄 Data & synk</div>
+    <div style="font-size:12px;color:#999;margin-bottom:10px;line-height:1.5">Exportera din data och importera på en annan enhet.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" style="flex:1;font-size:13px;padding:9px 0" onclick="exportData()">⬇ Exportera</button>
+      <button class="btn-sec" style="flex:1;font-size:13px;padding:9px 0;background:#222236;color:#999;border-radius:10px" onclick="document.getElementById('import-input').click()">⬆ Importera</button>
+      <input id="import-input" type="file" accept=".json" style="display:none" onchange="importData(event)"/>
+    </div>
+  </div>
+  <div id="empty-dash" class="empty"><div style="font-size:44px">📦</div><div style="margin-top:8px">Inga affärer ännu — lägg till din första!</div></div>
+</div>
+
+<!-- DEALS -->
+<div id="view-deals" style="display:none">
+  <div id="form-wrap" style="display:none">
+    <div class="card">
+      <div class="card-title" id="form-title">➕ Ny affär</div>
+      <div class="form-col">
+        <input id="f-name" placeholder="Objektnamn *"/>
+        <input id="f-desc" placeholder="Beskrivning (valfritt)"/>
+        <div class="form-row">
+          <input id="f-buy" type="number" placeholder="Inköpspris (kr) *"/>
+          <input id="f-sell" type="number" placeholder="Säljpris (kr)"/>
+        </div>
+        <div class="form-row">
+          <input id="f-buydate" type="date"/>
+          <input id="f-selldate" type="date"/>
+        </div>
+        <select id="f-cat">
+          <option>Elektronik</option><option>Kläder</option><option>Möbler</option>
+          <option>Sport</option><option>Spel</option><option>Fordon</option><option>Övrigt</option>
+        </select>
+        <select id="f-plat">
+          <option>Blocket</option><option>Facebook Marketplace</option>
+          <option>eBay</option><option>Tradera</option><option>Annat</option>
+        </select>
+        <select id="f-status"><option>Inköpt</option><option>Såld</option></select>
+        <div class="img-drop" id="img-drop" onclick="document.getElementById('img-input').click()">
+          <span id="img-label">📷 Lägg till bild</span>
+          <input id="img-input" type="file" accept="image/*" style="display:none" onchange="handleImg(event)"/>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="submitForm()">Spara</button>
+          <button class="btn-sec" style="border-radius:10px" onclick="closeForm()">Avbryt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="filters">
+    <button class="pill active" onclick="setFilter('Alla',this)">Alla <span id="f-all">0</span></button>
+    <button class="pill" onclick="setFilter('Inköpt',this)">Inköpt <span id="f-ink">0</span></button>
+    <button class="pill" onclick="setFilter('Såld',this)">Såld <span id="f-sald">0</span></button>
+  </div>
+  <div id="deal-list"></div>
+  <div id="empty-deals" class="empty" style="display:none"><div style="font-size:44px">📭</div><div style="margin-top:8px">Inga affärer här</div></div>
+</div>
+
+<!-- GOAL -->
+<div id="view-goal" style="display:none">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div class="card-title" style="margin:0">🎯 Ditt mål</div>
+      <button class="goal-edit" onclick="toggleGoalEdit()">✏️ Ändra</button>
+    </div>
+    <div id="goal-edit-form" style="display:none;margin-top:10px">
+      <div class="form-col">
+        <div class="form-row">
+          <div>
+            <div style="font-size:11px;color:#666;margin-bottom:4px">Målbelopp (kr)</div>
+            <input id="g-amount" type="number" value="200000"/>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#666;margin-bottom:4px">Måldatum</div>
+            <input id="g-date" type="date" value="2028-01-28"/>
+          </div>
+        </div>
+        <button class="btn-primary" style="font-size:13px;padding:9px 0" onclick="saveGoal()">Spara mål</button>
+      </div>
+    </div>
+    <div id="goal-display">
+      <div class="goal-big green" id="g-progress-text">0 kr</div>
+      <div class="goal-row">
+        <span class="muted">av <span id="g-target-text" class="white">200 000 kr</span></span>
+        <span id="g-pct" class="green">0%</span>
+      </div>
+      <div class="progress-bg"><div class="progress-fill" id="g-bar" style="width:0%"></div></div>
+      <div class="goal-row">
+        <span id="g-remaining" class="muted"></span>
+        <span id="g-days" class="days-chip"></span>
+      </div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #222236">
+        <div class="card-title">📅 Vad krävs?</div>
+        <div class="goal-row"><span class="muted">Snitt per månad</span><span id="g-per-month" class="white" style="font-weight:700"></span></div>
+        <div class="goal-row" style="margin-top:6px"><span class="muted">Din nuv. snitt/månad</span><span id="g-cur-month" class="white" style="font-weight:700"></span></div>
+        <div style="margin-top:8px" id="g-track"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏁 Milstolpar</div>
+    <div id="milestones"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎂 35-årsdagen 28 jan 2028</div>
+    <div style="font-size:13px;color:#999;line-height:1.6">
+      Räknar ned till din 35-årsdag — den dagen siktar du på att ha nått <span class="green" style="font-weight:700">200 000 kr</span> i total flipvinst. 💪
+    </div>
+    <div id="birthday-countdown" style="margin-top:10px;font-size:22px;font-weight:800;color:#7c6fff"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const STORAGE = 'flip-tracker-v2';
+const GOAL_STORAGE = 'flip-tracker-goal';
+let deals = [];
+let editId = null;
+let currentFilter = 'Alla';
+let imgData = null;
+let goal = { amount: 200000, date: '2028-01-28' };
+
+function load() {
+  try { deals = JSON.parse(localStorage.getItem(STORAGE)) || []; } catch { deals = []; }
+  try { const g = JSON.parse(localStorage.getItem(GOAL_STORAGE)); if(g) goal = g; } catch {}
+}
+function save() { localStorage.setItem(STORAGE, JSON.stringify(deals)); }
+function saveGoalData() { localStorage.setItem(GOAL_STORAGE, JSON.stringify(goal)); }
+
+function formatSEK(n) {
+  if(n == null) return '–';
+  return n.toLocaleString('sv-SE', {style:'currency',currency:'SEK',maximumFractionDigits:0});
+}
+
+function showToast(msg, ok=true) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+function setTab(tab) {
+  ['dashboard','deals','goal'].forEach(t => {
+    document.getElementById('view-'+t).style.display = t===tab ? 'block' : 'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='dashboard') renderDashboard();
+  if(tab==='deals') renderDeals();
+  if(tab==='goal') renderGoal();
+}
+
+function openForm() {
+  editId = null; imgData = null;
+  ['f-name','f-desc','f-buy','f-sell','f-buydate','f-selldate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-cat').value = 'Elektronik';
+  document.getElementById('f-plat').value = 'Blocket';
+  document.getElementById('f-status').value = 'Inköpt';
+  document.getElementById('img-label').innerHTML = '📷 Lägg till bild';
+  document.getElementById('form-title').textContent = '➕ Ny affär';
+  document.getElementById('form-wrap').style.display = 'block';
+  setTab('deals');
+}
+
+function closeForm() {
+  document.getElementById('form-wrap').style.display = 'none';
+  editId = null; imgData = null;
+}
+
+function handleImg(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    imgData = ev.target.result;
+    document.getElementById('img-label').innerHTML = '<img src="'+imgData+'" style="max-height:100px;border-radius:8px;object-fit:cover"/>';
+  };
+  r.readAsDataURL(file);
+}
+
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const buy = parseFloat(document.getElementById('f-buy').value);
+  if(!name || !buy) { showToast('Fyll i namn och inköpspris', false); return; }
+  const deal = {
+    id: editId || Date.now().toString(),
+    name, buy,
+    desc: document.getElementById('f-desc').value,
+    sell: document.getElementById('f-sell').value ? parseFloat(document.getElementById('f-sell').value) : null,
+    buyDate: document.getElementById('f-buydate').value,
+    sellDate: document.getElementById('f-selldate').value,
+    cat: document.getElementById('f-cat').value,
+    plat: document.getElementById('f-plat').value,
+    status: document.getElementById('f-status').value,
+    img: imgData || (editId ? deals.find(d=>d.id===editId)?.img : null)
+  };
+  if(editId) deals = deals.map(d => d.id===editId ? deal : d);
+  else deals = [deal, ...deals];
+  save(); closeForm(); renderDeals(); renderHeader();
+  showToast(editId ? 'Affär uppdaterad!' : 'Affär tillagd!');
+}
+
+function deleteDeal(id) {
+  deals = deals.filter(d => d.id !== id);
+  save(); renderDeals(); renderHeader(); renderDashboard();
+  showToast('Affär borttagen');
+}
+
+function editDeal(id) {
+  const d = deals.find(x=>x.id===id);
+  if(!d) return;
+  editId = id; imgData = d.img || null;
+  document.getElementById('f-name').value = d.name;
+  document.getElementById('f-desc').value = d.desc || '';
+  document.getElementById('f-buy').value = d.buy;
+  document.getElementById('f-sell').value = d.sell || '';
+  document.getElementById('f-buydate').value = d.buyDate || '';
+  document.getElementById('f-selldate').value = d.sellDate || '';
+  document.getElementById('f-cat').value = d.cat;
+  document.getElementById('f-plat').value = d.plat;
+  document.getElementById('f-status').value = d.status;
+  document.getElementById('img-label').innerHTML = d.img ? '<img src="'+d.img+'" style="max-height:100px;border-radius:8px;object-fit:cover"/>' : '📷 Lägg till bild';
+  document.getElementById('form-title').textContent = '✏️ Redigera affär';
+  document.getElementById('form-wrap').style.display = 'block';
+  setTab('deals');
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderDeals();
+}
+
+function renderHeader() {
+  const active = deals.filter(d=>d.status==='Inköpt').length;
+  document.getElementById('hdr-sub').textContent = deals.length + ' affärer · ' + active + ' aktiva';
+}
+
+function renderDeals() {
+  const sold = deals.filter(d=>d.status==='Såld');
+  const active = deals.filter(d=>d.status==='Inköpt');
+  document.getElementById('f-all').textContent = deals.length;
+  document.getElementById('f-ink').textContent = active.length;
+  document.getElementById('f-sald').textContent = sold.length;
+  const filtered = currentFilter==='Alla' ? deals : deals.filter(d=>d.status===currentFilter);
+  const list = document.getElementById('deal-list');
+  document.getElementById('empty-deals').style.display = filtered.length ? 'none' : 'block';
+  list.innerHTML = filtered.map(d => {
+    const profit = d.sell != null ? d.sell - d.buy : null;
+    const roi = profit != null && d.buy ? (profit/d.buy*100).toFixed(0) : null;
+    const profitStr = profit != null ? '<span class="'+(profit>=0?'green':'red')+'" style="font-weight:700">'+(profit>=0?'+':'')+formatSEK(profit)+' ('+roi+'%)</span>' : '';
+    const sellStr = d.sell != null ? '<span class="muted">Sålt: <b class="white">'+formatSEK(d.sell)+'</b></span>' : '';
+    const img = d.img ? '<img class="deal-img" src="'+d.img+'"/>' : '<div class="deal-ph">📦</div>';
+    return `<div class="deal-card">
+      ${img}
+      <div class="deal-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+          <div class="deal-name">${d.name}</div>
+          <span class="badge ${d.status==='Såld'?'badge-sold':'badge-active'}">${d.status}</span>
+        </div>
+        <div class="deal-meta">${d.cat} · ${d.plat}</div>
+        <div class="deal-prices">
+          <span class="muted">Köpt: <b class="white">${formatSEK(d.buy)}</b></span>
+          ${sellStr} ${profitStr}
+        </div>
+      </div>
+      <div class="deal-actions">
+        <button class="icon-btn" onclick="editDeal('${d.id}')">✏️</button>
+        <button class="icon-btn" style="color:#f87171" onclick="deleteDeal('${d.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDashboard() {
+  const sold = deals.filter(d=>d.status==='Såld'&&d.sell!=null);
+  const active = deals.filter(d=>d.status==='Inköpt');
+  const total = sold.reduce((s,d)=>s+(d.sell-d.buy),0);
+  const avg = sold.length ? total/sold.length : 0;
+  const roi = sold.length ? sold.reduce((s,d)=>s+((d.sell-d.buy)/d.buy*100),0)/sold.length : 0;
+  document.getElementById('s-total').textContent = formatSEK(total);
+  document.getElementById('s-total').className = 'stat-value '+(total>=0?'green':'red');
+  document.getElementById('s-sold').textContent = sold.length;
+  document.getElementById('s-active').textContent = active.length+' pågående';
+  document.getElementById('s-avg').textContent = formatSEK(avg);
+  document.getElementById('s-roi').textContent = roi.toFixed(0)+'%';
+  document.getElementById('empty-dash').style.display = deals.length ? 'none' : 'block';
+
+  // Best deal
+  if(sold.length) {
+    const best = sold.reduce((a,b)=>(b.sell-b.buy)>(a.sell-a.buy)?b:a);
+    document.getElementById('best-card').style.display='block';
+    document.getElementById('best-name').textContent = best.name;
+    const bp = best.sell-best.buy;
+    document.getElementById('best-profit').textContent = '+'+formatSEK(bp)+' · '+(bp/best.buy*100).toFixed(0)+'% ROI';
+    document.getElementById('best-img').innerHTML = best.img ? '<img src="'+best.img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0"/>' : '<div style="width:48px;height:48px;border-radius:8px;background:#222236;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📦</div>';
+  }
+
+  // Chart
+  const monthMap = {};
+  sold.forEach(d => { const k=d.sellDate?d.sellDate.slice(0,7):null; if(k) monthMap[k]=(monthMap[k]||0)+(d.sell-d.buy); });
+  const cData = Object.entries(monthMap).sort(([a],[b])=>a.localeCompare(b)).slice(-6);
+  if(cData.length) {
+    document.getElementById('chart-card').style.display='block';
+    const maxV = Math.max(...cData.map(([,v])=>v),1);
+    document.getElementById('chart').innerHTML = cData.map(([m,v])=>`
+      <div class="bar-wrap">
+        <div class="chart-val">${Math.round(v).toLocaleString('sv-SE')}</div>
+        <div class="bar" style="height:${Math.max(v/maxV*58,4)}px"></div>
+        <div class="chart-month">${m.slice(5)}/${m.slice(2,4)}</div>
+      </div>`).join('');
+  }
+
+  // Platforms
+  if(sold.length) {
+    const pm = {};
+    sold.forEach(d=>{ pm[d.plat]=(pm[d.plat]||0)+(d.sell-d.buy); });
+    document.getElementById('platform-card').style.display='block';
+    document.getElementById('platform-list').innerHTML = Object.entries(pm).sort(([,a],[,b])=>b-a).map(([p,v])=>`
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px">
+        <span class="muted">${p}</span><span class="green" style="font-weight:700">${formatSEK(v)}</span>
+      </div>`).join('');
+  }
+}
+
+function renderGoal() {
+  const sold = deals.filter(d=>d.status==='Såld'&&d.sell!=null);
+  const total = sold.reduce((s,d)=>s+(d.sell-d.buy),0);
+  const goalAmount = goal.amount;
+  const goalDate = new Date(goal.date);
+  const today = new Date();
+  const pct = Math.min(total/goalAmount*100,100);
+  const remaining = Math.max(goalAmount-total,0);
+  const daysLeft = Math.max(Math.ceil((goalDate-today)/(1000*60*60*24)),0);
+  const monthsLeft = daysLeft/30.44;
+
+  document.getElementById('g-progress-text').textContent = formatSEK(total);
+  document.getElementById('g-target-text').textContent = formatSEK(goalAmount);
+  document.getElementById('g-pct').textContent = pct.toFixed(1)+'%';
+  document.getElementById('g-bar').style.width = pct+'%';
+  document.getElementById('g-remaining').textContent = remaining > 0 ? formatSEK(remaining)+' kvar' : '🎉 Mål uppnått!';
+  document.getElementById('g-days').textContent = daysLeft+' dagar kvar';
+
+  const required = monthsLeft > 0 ? remaining/monthsLeft : 0;
+
+  // Current monthly avg
+  const monthMap = {};
+  sold.forEach(d=>{ const k=d.sellDate?d.sellDate.slice(0,7):null; if(k) monthMap[k]=(monthMap[k]||0)+(d.sell-d.buy); });
+  const months = Object.values(monthMap);
+  const curMonthly = months.length ? months.reduce((a,b)=>a+b,0)/months.length : 0;
+
+  document.getElementById('g-per-month').textContent = formatSEK(Math.round(required));
+  document.getElementById('g-cur-month').textContent = formatSEK(Math.round(curMonthly));
+
+  const onTrack = curMonthly >= required;
+  document.getElementById('g-track').innerHTML = curMonthly > 0
+    ? `<span class="${onTrack?'on-track':'off-track'}">${onTrack?'✅ Du är på rätt spår!':'⚠️ Du behöver öka takten lite'}</span>`
+    : '<span class="muted">Lägg till sålda affärer för att se din progress</span>';
+
+  // Milestones
+  const ms = [25,50,75,100].map(p => {
+    const amt = goalAmount*p/100;
+    const reached = total >= amt;
+    return `<div class="milestone-row">
+      <div class="milestone-dot" style="background:${reached?'#4ade80':'#333'}"></div>
+      <span style="flex:1;color:${reached?'#f0f0f0':'#666'}">${p}% — ${formatSEK(amt)}</span>
+      <span style="${reached?'color:#4ade80':'color:#555'}">${reached?'✅ Uppnått':'–'}</span>
+    </div>`;
+  });
+  document.getElementById('milestones').innerHTML = ms.join('');
+
+  // Birthday countdown
+  document.getElementById('birthday-countdown').textContent = daysLeft+' dagar kvar till 35-årsdagen! 🎂';
+
+  // Update goal form values
+  document.getElementById('g-amount').value = goalAmount;
+  document.getElementById('g-date').value = goal.date;
+}
+
+function toggleGoalEdit() {
+  const f = document.getElementById('goal-edit-form');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+
+function saveGoal() {
+  goal.amount = parseFloat(document.getElementById('g-amount').value) || 200000;
+  goal.date = document.getElementById('g-date').value || '2028-01-28';
+  saveGoalData();
+  toggleGoalEdit();
+  renderGoal();
+  showToast('Mål sparat!');
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(deals,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'flip-tracker-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  showToast('Data exporterad!');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if(!Array.isArray(parsed)) throw new Error();
+      deals = parsed; save(); renderDeals(); renderDashboard(); renderHeader();
+      showToast(parsed.length+' affärer importerade!');
+    } catch { showToast('Ogiltig fil', false); }
+  };
+  r.readAsText(file);
+  e.target.value='';
+}
+
+load(); renderHeader(); renderDashboard();
+</script>
+</body>
+</html>
