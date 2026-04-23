@@ -2,7 +2,8 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<style>html{width:100%;height:100%;}</style>
 <meta name="theme-color" content="#0f0f1a"/>
 <link rel="manifest" href="/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -572,16 +573,40 @@ function renderGoal(){
     ?`<span class="${onTrack?'on-track':'off-track'}">${onTrack?'✅ Du är på rätt spår!':'⚠️ Du behöver öka takten lite'}</span>`
     :'<span class="muted">Lägg till sålda affärer för att se din progress</span>';
 
-  const ms=[25,50,75,100].map(p=>{
-    const amt=goalAmount*p/100;
-    const reached=total>=amt;
+  const milestones=[
+    {amt:500,  icon:'🔌', label:'Samsung USB-C laddare 25W',        desc:'Elgiganten ~499 kr'},
+    {amt:1500, icon:'🎮', label:'Xbox trådlös handkontroll',         desc:'Elgiganten ~1 499 kr'},
+    {amt:2500, icon:'🎧', label:'JBL Tune 510BT hörlurar',           desc:'Elgiganten ~2 490 kr'},
+    {amt:4000, icon:'⌚', label:'Samsung Galaxy Watch FE',            desc:'Elgiganten ~3 990 kr'},
+    {amt:5000, icon:'🚗', label:'Skrotbil! Volvo 244 -89',           desc:'Blocket ~4 000–6 000 kr, kör och hoppas!'},
+    {amt:8000, icon:'🎧', label:'Sony WH-1000XM5 hörlurar',          desc:'Elgiganten ~7 990 kr'},
+    {amt:12000,icon:'🚗', label:'Toyota Yaris 2003, ca 20 000 mil',  desc:'Blocket ~10 000–13 000 kr'},
+    {amt:15000,icon:'📱', label:'Samsung Galaxy S25',                 desc:'Elgiganten ~14 990 kr'},
+    {amt:20000,icon:'🚗', label:'VW Golf 2009, ca 15 000 mil',       desc:'Wayke ~18 000–22 000 kr'},
+    {amt:25000,icon:'📺', label:'Samsung 55" QLED TV',               desc:'Elgiganten ~24 990 kr'},
+    {amt:35000,icon:'🚗', label:'Volvo V60 2013, ca 15 000 mil',     desc:'Wayke ~33 000–38 000 kr'},
+    {amt:50000,icon:'🚙', label:'VW Passat 2015, ca 12 000 mil',     desc:'Wayke ~48 000–55 000 kr'},
+    {amt:65000,icon:'🚙', label:'Volvo XC60 2015, ca 10 000 mil',    desc:'Wayke ~62 000–68 000 kr'},
+    {amt:80000,icon:'🚙', label:'BMW 3-serie 2017, ca 9 000 mil',    desc:'Wayke ~78 000–85 000 kr'},
+    {amt:100000,icon:'🏁',label:'Halvvägs till flipmålet! 100 000 kr',desc:'Bra jobbat Douglas! 🎉'},
+    {amt:120000,icon:'⚡',label:'Polestar 2 2021, ca 12 000 mil',    desc:'Wayke ~115 000–125 000 kr — första elbilen!'},
+    {amt:150000,icon:'⚡',label:'Tesla Model 3 2019, ca 20 000 mil', desc:'Wayke ~145 000–160 000 kr — nu pratar vi Tesla!'},
+    {amt:175000,icon:'🚗',label:'Tesla Model 3 2021, ca 14 000 mil', desc:'Wayke ~165 000–175 000 kr'},
+    {amt:200000,icon:'🎂',label:'MÅLET! Tesla Model Y 2023!',        desc:'200 000 kr flipvinst + 150 000 kr bil = 350 000 kr — Tesla Model Y 2023 ~4 000 mil på wayke.se!'},
+  ];
+  const msHtml=milestones.map(m=>{
+    const reached=total>=m.amt;
     return`<div class="milestone-row">
       <div class="milestone-dot" style="background:${reached?'#4ade80':'#333'}"></div>
-      <span style="flex:1;color:${reached?'#f0f0f0':'#666'}">${p}% — ${formatSEK(amt)}</span>
-      <span style="${reached?'color:#4ade80':'color:#555'}">${reached?'✅':'-'}</span>
+      <span style="font-size:16px">${m.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="color:${reached?'#f0f0f0':'#666'};font-size:var(--font-sm);font-weight:${reached?'700':'400'}">${m.label}</div>
+        <div style="color:#555;font-size:10px">${formatSEK(m.amt)} — ${m.desc}</div>
+      </div>
+      <span style="${reached?'color:#4ade80':'color:#555'}">${reached?'✅':'–'}</span>
     </div>`;
   });
-  document.getElementById('milestones').innerHTML=ms.join('');
+  document.getElementById('milestones').innerHTML=msHtml.join('');
   document.getElementById('birthday-countdown').textContent=daysLeft+' dagar kvar till 35-årsdagen! 🎂';
   document.getElementById('g-amount').value=goalAmount;
   document.getElementById('g-date').value=goal.date;
@@ -644,9 +669,30 @@ function renderSplash(){
   document.getElementById('sp-avg').textContent=formatSEK(avg);
   document.getElementById('sp-pct').textContent=pct.toFixed(1)+'%';
   document.getElementById('sp-target').textContent=formatSEK(goal.amount);
-  document.getElementById('sp-track').innerHTML=deals.length>0
-    ?(onTrack?'<span class="on-track">✅ Du är på rätt spår!</span>':'<span class="off-track">⚠️ Öka takten lite</span>')
-    :'<span class="muted">Lägg till din första affär!</span>';
+  // Smart splash message
+  let trackMsg = '';
+  if(deals.length === 0){
+    trackMsg = '<span class="muted">👋 Dags att lägga till din första affär!</span>';
+  } else if(!curMonthly){
+    trackMsg = '<span class="muted">📊 Lägg till sålda affärer för att se progress</span>';
+  } else {
+    const diff = curMonthly - required;
+    const diffStr = formatSEK(Math.abs(Math.round(diff)));
+    if(diff >= 5000){
+      trackMsg = `<span class="on-track">🚀 Grym fart! Du ligger ${diffStr} före planen!</span>`;
+    } else if(diff >= 2000){
+      trackMsg = `<span class="on-track">✅ Bra jobbat! ${diffStr} före schemat!</span>`;
+    } else if(diff >= 0){
+      trackMsg = `<span class="on-track">✅ Du är på rätt spår!</span>`;
+    } else if(diff >= -2000){
+      trackMsg = `<span class="off-track">📈 Nästan där — bara ${diffStr} efter planen</span>`;
+    } else if(diff >= -5000){
+      trackMsg = `<span class="off-track">⚠️ ${diffStr} efter planen — öka takten lite</span>`;
+    } else {
+      trackMsg = `<span class="off-track">💪 ${diffStr} efter — dags att hitta nästa deal!</span>`;
+    }
+  }
+  document.getElementById('sp-track').innerHTML = trackMsg;
 
   setTimeout(()=>{
     document.getElementById('sp-bar').style.width=pct+'%';
