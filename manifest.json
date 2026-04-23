@@ -9,8 +9,8 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/googlesamples/web-fundamentals/master/fundamentals/push-notifications/image-files/icon-192x192.png",
-      "sizes": "192x192",
+      "src": "/launchericon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     }
