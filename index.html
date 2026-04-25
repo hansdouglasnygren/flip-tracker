@@ -106,7 +106,7 @@ input,select{background:#222236;border:1px solid #2e2e4e;border-radius:8px;paddi
 .tesla-wrap{position:relative;height:40px;margin:4px 0 8px}
 .tesla-track{position:absolute;bottom:0;left:0;right:0;height:3px;background:#222236;border-radius:99px}
 .tesla-road{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#7c6fff,#4ade80);border-radius:99px;transition:width 1.2s ease}
-.tesla-car{position:absolute;bottom:3px;font-size:24px;transition:left 1.2s cubic-bezier(.34,1.56,.64,1);transform:translateX(-50%)}
+.tesla-car{position:absolute;bottom:3px;transition:left 1.2s cubic-bezier(.34,1.56,.64,1);transform:translateX(-50%)}
 .goal-row{display:flex;justify-content:space-between;font-size:var(--font-sm);margin-bottom:4px}
 .goal-big{font-size:clamp(22px,6vw,32px);font-weight:800;margin:6px 0}
 .goal-edit{background:#222236;border-radius:8px;padding:4px 10px;color:#999;font-size:var(--font-xs);font-weight:600}
@@ -282,7 +282,7 @@ input,select{background:#222236;border:1px solid #2e2e4e;border-radius:8px;paddi
       <div class="tesla-wrap">
         <div class="tesla-track"></div>
         <div class="tesla-road" id="tesla-road" style="width:0%"></div>
-        <div class="tesla-car" id="tesla-car" style="left:2%">🚗</div>
+        <div class="tesla-car" id="tesla-car" style="left:2%"><img src="/368-3680266_tesla-model-y-red-hd-png-download.png" style="height:32px;width:auto;transform:scaleX(-1)"/></div>
       </div>
       <div class="goal-row">
         <span id="g-remaining" class="muted"></span>
