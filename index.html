@@ -282,7 +282,7 @@ input,select{background:#222236;border:1px solid #2e2e4e;border-radius:8px;paddi
       <div class="tesla-wrap">
         <div class="tesla-track"></div>
         <div class="tesla-road" id="tesla-road" style="width:0%"></div>
-        <div class="tesla-car" id="tesla-car" style="left:2%"><img src="/white-city-car-transparent-background-3d-rendering-illustration_494250-62755.avif" style="height:32px;width:auto;transform:rotate(180deg)"/></div>
+        <div class="tesla-car" id="tesla-car" style="left:2%"><img src="/white-city-car-transparent-background-3d-rendering-illustration_494250-62755.avif" style="height:32px;width:auto;transform:scaleX(-1)"/></div>
       </div>
       <div class="goal-row">
         <span id="g-remaining" class="muted"></span>
@@ -532,7 +532,8 @@ function renderDashboard(fromTotal,toTotal){
   const active=deals.filter(d=>d.status==='Inköpt');
   const total=sold.reduce((s,d)=>s+(d.sell-d.buy),0);
   const avg=sold.length?total/sold.length:0;
-  const roi=sold.length?sold.reduce((s,d)=>s+((d.sell-d.buy)/d.buy*100),0)/sold.length:0;
+  const soldWithBuy=sold.filter(d=>d.buy>0);
+  const roi=soldWithBuy.length?soldWithBuy.reduce((s,d)=>s+((d.sell-d.buy)/d.buy*100),0)/soldWithBuy.length:0;
   document.getElementById('s-total').className='stat-value '+(total>=0?'green':'red');
   document.getElementById('s-active').textContent=active.length+' pågående';
   document.getElementById('empty-dash').style.display=deals.length?'none':'block';
