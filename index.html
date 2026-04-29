@@ -13,8 +13,6 @@ body{background:#0f0f1a;color:#f0f0f0;font-family:-apple-system,BlinkMacSystemFo
 :root{--pad:14px;--card-pad:14px;--font-lg:22px;--font-md:15px;--font-sm:13px;--font-xs:11px}
 .app{max-width:720px;margin:0 auto;padding:14px var(--pad) 90px}
 button{font-family:inherit;cursor:pointer;border:none;outline:none}
-
-/* SPLASH */
 #splash{position:fixed;inset:0;background:#0f0f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;transition:opacity 0.5s}
 #splash.hide{opacity:0;pointer-events:none}
 .splash-logo{font-size:52px;animation:pulse 1s ease-in-out infinite alternate}
@@ -30,8 +28,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .splash-bar-fill{height:100%;background:linear-gradient(90deg,#7c6fff,#4ade80);border-radius:99px;transition:width 1s ease}
 .splash-track{font-size:13px;font-weight:700;margin-top:8px;text-align:center}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.1)}}
-
-/* WIN POPUP */
 #win-popup{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.7);opacity:0;pointer-events:none;transition:opacity 0.3s}
 #win-popup.show{opacity:1;pointer-events:auto}
 .win-card{background:linear-gradient(135deg,#1a1a2e,#222236);border:1px solid #7c6fff44;border-radius:20px;padding:28px 24px;text-align:center;max-width:320px;width:100%;animation:popIn 0.4s cubic-bezier(.34,1.56,.64,1)}
@@ -46,8 +42,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .win-eq-price{font-size:12px;color:#7c6fff}
 .win-close-bar{height:4px;background:#7c6fff;border-radius:99px;margin-top:16px;animation:shrink 4s linear forwards}
 @keyframes shrink{from{width:100%}to{width:0%}}
-
-/* CONFIRM */
 #confirm-dialog{position:fixed;inset:0;z-index:9997;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.7);opacity:0;pointer-events:none;transition:opacity 0.2s}
 #confirm-dialog.show{opacity:1;pointer-events:auto}
 .confirm-card{background:#1a1a2e;border-radius:16px;padding:24px;max-width:300px;width:100%;text-align:center}
@@ -56,8 +50,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .confirm-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .confirm-yes{background:#f87171;border-radius:10px;padding:10px;color:#fff;font-weight:700;font-size:14px}
 .confirm-no{background:#222236;border-radius:10px;padding:10px;color:#999;font-weight:700;font-size:14px}
-
-/* MAIN */
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .logo{font-size:var(--font-lg);font-weight:800}.sub{font-size:var(--font-xs);color:#666;margin-top:2px}
 .btn-primary{background:#7c6fff;border-radius:10px;padding:10px 16px;color:#fff;font-weight:700;font-size:var(--font-sm)}
@@ -71,7 +63,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .stat-label{font-size:var(--font-xs);color:#666;margin-bottom:2px}
 .stat-value{font-size:clamp(14px,4vw,20px);font-weight:800;line-height:1.2}
 .stat-sub{font-size:10px;color:#666;margin-top:2px}
-input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:8px;padding:9px 12px;color:#f0f0f0;width:100%;font-size:var(--font-sm);font-family:inherit}
+input,select{background:#222236;border:1px solid #2e2e4e;border-radius:8px;padding:9px 12px;color:#f0f0f0;width:100%;font-size:var(--font-sm);font-family:inherit}
 .form-col{display:flex;flex-direction:column;gap:8px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .img-drop{border:2px dashed #2e2e4e;border-radius:10px;padding:14px;text-align:center;cursor:pointer;color:#666;font-size:var(--font-sm);background:#222236}
@@ -117,18 +109,20 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
 .off-track{color:#f87171;font-weight:700;font-size:var(--font-sm)}
 .milestone-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .milestone-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-@keyframes countup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.extra-cost-row{display:flex;gap:8px;align-items:center}
+.extra-cost-row input{flex:1}
+.extra-cost-row button{background:#f87171;border-radius:8px;padding:8px 10px;color:#fff;font-size:12px;flex-shrink:0}
+.add-cost-btn{background:#222236;border:1px dashed #2e2e4e;border-radius:8px;padding:8px;color:#666;font-size:var(--font-xs);width:100%;text-align:center}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
   <div class="splash-logo">💸</div>
   <div class="splash-title">Flip Tracker</div>
   <div class="splash-cards">
     <div class="splash-card"><div class="splash-card-label">Total inkomst</div><div class="splash-card-value green" id="sp-total">0 kr</div></div>
-    <div class="splash-card"><div class="splash-card-label">Affärer + jobb</div><div class="splash-card-value" id="sp-sold">0</div><div class="splash-card-sub" id="sp-active">0 aktiva</div></div>
+    <div class="splash-card"><div class="splash-card-label">Affärer + jobb</div><div class="splash-card-value" id="sp-sold">0</div><div class="splash-card-sub" id="sp-active"></div></div>
     <div class="splash-card"><div class="splash-card-label">Snittvinst</div><div class="splash-card-value purple" id="sp-avg">0 kr</div></div>
     <div class="splash-card"><div class="splash-card-label">Mål</div><div class="splash-card-value yellow" id="sp-pct">0%</div></div>
   </div>
@@ -139,7 +133,6 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
   </div>
 </div>
 
-<!-- WIN POPUP -->
 <div id="win-popup">
   <div class="win-card">
     <div class="win-icon" id="wp-icon">🎉</div>
@@ -148,13 +141,12 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
     <div class="win-divider"></div>
     <div class="win-eq-label">Det motsvarar ungefär</div>
     <div class="win-eq-icon" id="wp-eq-icon">🎧</div>
-    <div class="win-eq-name" id="wp-eq-name">Samsung Buds</div>
-    <div class="win-eq-price" id="wp-eq-price">2 995 kr på Elgiganten</div>
+    <div class="win-eq-name" id="wp-eq-name"></div>
+    <div class="win-eq-price" id="wp-eq-price"></div>
     <div class="win-close-bar" id="wp-bar"></div>
   </div>
 </div>
 
-<!-- CONFIRM -->
 <div id="confirm-dialog">
   <div class="confirm-card">
     <div class="confirm-title">Ta bort?</div>
@@ -168,15 +160,10 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
 
 <div class="app">
 <div id="toast" class="toast"></div>
-
 <div class="header">
-  <div>
-    <div class="logo">💸 Flip Tracker</div>
-    <div class="sub" id="hdr-sub">0 affärer · 0 aktiva</div>
-  </div>
+  <div><div class="logo">💸 Flip Tracker</div><div class="sub" id="hdr-sub">0 affärer</div></div>
   <button class="btn-primary" id="ny-btn" onclick="openForm()">+ Ny</button>
 </div>
-
 <div class="tabs">
   <button class="tab active" id="tab-dashboard" onclick="setTab('dashboard')">📊 Dash</button>
   <button class="tab" id="tab-deals" onclick="setTab('deals')">📦 Affärer</button>
@@ -192,25 +179,13 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
     <div class="stat"><div class="stat-label">Extraknäck</div><div class="stat-value orange" id="s-gig">0 kr</div><div class="stat-sub" id="s-gig-count">0 jobb</div></div>
     <div class="stat"><div class="stat-label">Snitt ROI</div><div class="stat-value yellow" id="s-roi">0%</div></div>
   </div>
-  <div class="card" id="best-month-card" style="display:none">
-    <div class="card-title">📅 Bästa månaden</div>
-    <div id="best-month-content"></div>
-  </div>
-  <div class="card" id="best-card" style="display:none">
-    <div class="card-title">🏆 Bästa affären</div>
-    <div style="display:flex;align-items:center;gap:10px"><div id="best-img"></div><div><div id="best-name" style="font-weight:700;font-size:var(--font-md)"></div><div id="best-profit" class="green" style="font-size:var(--font-sm);font-weight:600"></div></div></div>
-  </div>
-  <div class="card" id="chart-card" style="display:none">
-    <div class="card-title">📈 Inkomst per månad</div>
-    <div class="chart" id="chart"></div>
-  </div>
-  <div class="card" id="platform-card" style="display:none">
-    <div class="card-title">🏪 Per plattform</div>
-    <div id="platform-list"></div>
-  </div>
+  <div class="card" id="best-month-card" style="display:none"><div class="card-title">📅 Bästa månaden</div><div id="best-month-content"></div></div>
+  <div class="card" id="best-card" style="display:none"><div class="card-title">🏆 Bästa affären</div><div style="display:flex;align-items:center;gap:10px"><div id="best-img"></div><div><div id="best-name" style="font-weight:700"></div><div id="best-profit" class="green" style="font-size:var(--font-sm);font-weight:600"></div></div></div></div>
+  <div class="card" id="chart-card" style="display:none"><div class="card-title">📈 Inkomst per månad</div><div class="chart" id="chart"></div></div>
+  <div class="card" id="platform-card" style="display:none"><div class="card-title">🏪 Per plattform</div><div id="platform-list"></div></div>
   <div class="card">
     <div class="card-title">🔄 Data & synk</div>
-    <div style="font-size:var(--font-xs);color:#999;margin-bottom:10px;line-height:1.5">Exportera din data och importera på en annan enhet.</div>
+    <div style="font-size:var(--font-xs);color:#999;margin-bottom:10px">Exportera och importera din data.</div>
     <div style="display:flex;gap:8px">
       <button class="btn-primary" style="flex:1;font-size:var(--font-xs);padding:9px 0" onclick="exportData()">⬇ Exportera</button>
       <button class="btn-sec" style="flex:1;font-size:var(--font-xs);padding:9px 0;border-radius:10px" onclick="document.getElementById('import-input').click()">⬆ Importera</button>
@@ -229,9 +204,16 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
         <input id="f-name" placeholder="Objektnamn *"/>
         <input id="f-desc" placeholder="Beskrivning (valfritt)"/>
         <div class="form-row">
-          <input id="f-buy" type="number" placeholder="Inköpspris (0 = gratis)"/>
+          <input id="f-buy" type="number" placeholder="Inköpspris (0=gratis)"/>
           <input id="f-sell" type="number" placeholder="Säljpris"/>
         </div>
+        <!-- EXTRA COSTS -->
+        <div style="background:#222236;border-radius:10px;padding:10px">
+          <div style="font-size:var(--font-xs);color:#666;margin-bottom:8px">➕ Omkostnader (bensin, material etc.)</div>
+          <div id="extra-costs-list"></div>
+          <button class="add-cost-btn" onclick="addCostRow()">+ Lägg till omkostnad</button>
+        </div>
+        <div style="font-size:var(--font-xs);color:#666" id="total-cost-display"></div>
         <div class="form-row">
           <input id="f-buydate" type="date"/>
           <input id="f-selldate" type="date"/>
@@ -259,7 +241,7 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
   <div id="empty-deals" class="empty" style="display:none"><div style="font-size:44px">📭</div><div style="margin-top:8px">Inga affärer här</div></div>
 </div>
 
-<!-- EXTRAKNÄCK -->
+<!-- GIGS -->
 <div id="view-gigs" style="display:none">
   <div id="gig-form-wrap" style="display:none">
     <div class="card">
@@ -267,15 +249,7 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
       <div class="form-col">
         <input id="g-desc" placeholder="Beskrivning *"/>
         <input id="g-client" placeholder="Kund / Plats"/>
-        <select id="g-type">
-          <option>Teknisk hjälp</option>
-          <option>IT-support</option>
-          <option>Skräphämtning</option>
-          <option>Flytthjälp</option>
-          <option>Trädgård</option>
-          <option>Städning</option>
-          <option>Övrigt</option>
-        </select>
+        <select id="g-type"><option>Teknisk hjälp</option><option>IT-support</option><option>Skräphämtning</option><option>Flytthjälp</option><option>Trädgård</option><option>Städning</option><option>Övrigt</option></select>
         <div class="form-row">
           <input id="g-amount" type="number" placeholder="Belopp (kr) *"/>
           <input id="g-hours" type="number" placeholder="Timmar" step="0.5"/>
@@ -293,15 +267,12 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
       </div>
     </div>
   </div>
-
-  <!-- Gig stats -->
   <div class="grid2">
     <div class="stat"><div class="stat-label">Total extrainkomst</div><div class="stat-value orange" id="gs-total">0 kr</div></div>
     <div class="stat"><div class="stat-label">Antal jobb</div><div class="stat-value" id="gs-count">0</div><div class="stat-sub" id="gs-unpaid">0 obetalda</div></div>
     <div class="stat"><div class="stat-label">Snitt timlön</div><div class="stat-value purple" id="gs-hourly">–</div></div>
     <div class="stat"><div class="stat-label">Snitt per jobb</div><div class="stat-value yellow" id="gs-avg">0 kr</div></div>
   </div>
-
   <div class="filters">
     <button class="pill active" onclick="setGigFilter('Alla',this)">Alla <span id="gf-all">0</span></button>
     <button class="pill" onclick="setGigFilter('Betald',this)">Betald <span id="gf-paid">0</span></button>
@@ -329,10 +300,7 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
     </div>
     <div id="goal-display">
       <div class="goal-big green" id="g-progress-text">0 kr</div>
-      <div class="goal-row">
-        <span class="muted">av <span id="g-target-text" class="white">200 000 kr</span></span>
-        <span id="g-pct" class="green">0%</span>
-      </div>
+      <div class="goal-row"><span class="muted">av <span id="g-target-text" class="white">200 000 kr</span></span><span id="g-pct" class="green">0%</span></div>
       <div class="progress-bg"><div class="progress-fill" id="g-bar" style="width:0%"></div></div>
       <div class="tesla-wrap">
         <div class="tesla-track"></div>
@@ -341,10 +309,7 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
           <img src="/white-city-car-transparent-background-3d-rendering-illustration_494250-62755.avif" style="height:36px;width:auto;transform:scaleX(-1)"/>
         </div>
       </div>
-      <div class="goal-row">
-        <span id="g-remaining" class="muted"></span>
-        <span id="g-days" class="days-chip"></span>
-      </div>
+      <div class="goal-row"><span id="g-remaining" class="muted"></span><span id="g-days" class="days-chip"></span></div>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid #222236">
         <div class="card-title">📅 Vad krävs?</div>
         <div class="goal-row"><span class="muted">Snitt per månad</span><span id="g-per-month" class="white" style="font-weight:700"></span></div>
@@ -357,7 +322,7 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
   <div class="card"><div class="card-title">🏁 Milstolpar</div><div id="milestones"></div></div>
   <div class="card">
     <div class="card-title">🎂 35-årsdagen 28 jan 2028</div>
-    <div style="font-size:var(--font-sm);color:#999;line-height:1.6">Målet är <span class="green" style="font-weight:700">200 000 kr</span> i total inkomst till 35-årsdagen. 💪</div>
+    <div style="font-size:var(--font-sm);color:#999;line-height:1.6">Målet är <span class="green" style="font-weight:700">200 000 kr</span> total inkomst till 35-årsdagen. 💪</div>
     <div id="birthday-countdown" style="margin-top:10px;font-size:22px;font-weight:800;color:#7c6fff"></div>
   </div>
 </div>
@@ -365,10 +330,12 @@ input,select,textarea{background:#222236;border:1px solid #2e2e4e;border-radius:
 
 <script>
 const STORAGE='flip-tracker-v2', GOAL_STORAGE='flip-tracker-goal', GIG_STORAGE='flip-tracker-gigs';
-let deals=[], gigs=[], editId=null, editGigId=null, currentFilter='Alla', currentGigFilter='Alla';
+let deals=[], gigs=[], editId=null, editGigId=null;
+let currentFilter='Alla', currentGigFilter='Alla';
 let imgData=null, gigImgData=null;
 let goal={amount:200000,date:'2028-01-28'};
 let pendingDeleteId=null, pendingDeleteType=null;
+let extraCosts=[]; // [{desc, amount}]
 
 const EQUIV=[
   {max:600,   icon:'🔌', name:'Samsung USB-C laddare 25W',      price:'499 kr på Elgiganten'},
@@ -387,6 +354,52 @@ const EQUIV=[
   {max:999999,icon:'🚗', name:'Bra start mot Tesla-målet!',     price:'Håll i det! 💪'},
 ];
 function getEquiv(p){return EQUIV.find(e=>p<=e.max)||EQUIV[EQUIV.length-1];}
+
+// AUDIO
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+function playSound(type){
+  try{
+    if(type==='pling'){
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.setValueAtTime(880,ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1200,ctx.currentTime+0.1);
+      g.gain.setValueAtTime(0.3,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);
+      o.start();o.stop(ctx.currentTime+0.4);
+    } else if(type==='medium'){
+      [523,659,784].forEach((f,i)=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=f;o.type='sine';
+        g.gain.setValueAtTime(0,ctx.currentTime+i*0.12);
+        g.gain.linearRampToValueAtTime(0.25,ctx.currentTime+i*0.12+0.05);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.12+0.3);
+        o.start(ctx.currentTime+i*0.12);
+        o.stop(ctx.currentTime+i*0.12+0.35);
+      });
+    } else if(type==='fanfare'){
+      const notes=[523,659,784,1047,784,1047];
+      const times=[0,0.12,0.24,0.36,0.5,0.6];
+      notes.forEach((f,i)=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=f;o.type='square';
+        g.gain.setValueAtTime(0,ctx.currentTime+times[i]);
+        g.gain.linearRampToValueAtTime(0.15,ctx.currentTime+times[i]+0.05);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+times[i]+0.25);
+        o.start(ctx.currentTime+times[i]);
+        o.stop(ctx.currentTime+times[i]+0.3);
+      });
+    }
+  }catch(e){}
+}
+
+function getSoundType(profit){
+  if(profit>=10000)return'fanfare';
+  if(profit>=2000)return'medium';
+  return'pling';
+}
 
 function load(){
   try{deals=JSON.parse(localStorage.getItem(STORAGE))||[];}catch{deals=[];}
@@ -420,9 +433,9 @@ function showToast(msg,ok=true){
   setTimeout(()=>t.style.display='none',3000);
 }
 
-function showWinPopup(profit, isGig=false){
+function showWinPopup(profit,isGig=false){
   const eq=getEquiv(profit);
-  document.getElementById('wp-icon').textContent=profit>=10000?'🤑':'🎉';
+  document.getElementById('wp-icon').textContent=profit>=10000?'🤑':profit>=2000?'🎊':'🎉';
   document.getElementById('wp-title').textContent=isGig?'Jobb avslutat!':'Affär slutförd!';
   document.getElementById('wp-amount').textContent='+'+formatSEK(profit);
   document.getElementById('wp-eq-icon').textContent=eq.icon;
@@ -430,12 +443,12 @@ function showWinPopup(profit, isGig=false){
   document.getElementById('wp-eq-price').textContent=eq.price;
   const bar=document.getElementById('wp-bar');
   bar.style.animation='none';bar.offsetHeight;bar.style.animation='shrink 4s linear forwards';
-  const popup=document.getElementById('win-popup');
-  popup.classList.add('show');
-  setTimeout(()=>popup.classList.remove('show'),4200);
+  document.getElementById('win-popup').classList.add('show');
+  setTimeout(()=>document.getElementById('win-popup').classList.remove('show'),4200);
+  playSound(getSoundType(profit));
 }
 
-function confirmDelete(id,name,type='deal'){
+function confirmDelete(id,name,type){
   pendingDeleteId=id;pendingDeleteType=type;
   document.getElementById('confirm-sub').textContent=`Är du säker på att du vill ta bort "${name}"?`;
   document.getElementById('confirm-dialog').classList.add('show');
@@ -450,15 +463,51 @@ document.getElementById('confirm-yes-btn').onclick=function(){
   closeConfirm();
 };
 
+// EXTRA COSTS
+function addCostRow(desc='',amount=''){
+  const div=document.createElement('div');
+  div.className='extra-cost-row';
+  div.style.marginBottom='8px';
+  div.innerHTML=`<input placeholder="Beskrivning" value="${desc}" style="flex:2" oninput="updateTotalCost()"/>
+    <input type="number" placeholder="Kr" value="${amount}" style="flex:1" oninput="updateTotalCost()"/>
+    <button onclick="this.parentElement.remove();updateTotalCost()">✕</button>`;
+  document.getElementById('extra-costs-list').appendChild(div);
+  updateTotalCost();
+}
+
+function updateTotalCost(){
+  const buy=parseFloat(document.getElementById('f-buy').value)||0;
+  const costs=getExtraCosts();
+  const totalExtra=costs.reduce((s,c)=>s+c.amount,0);
+  const total=buy+totalExtra;
+  const el=document.getElementById('total-cost-display');
+  if(totalExtra>0){
+    el.textContent=`Totalkostnad: ${formatSEK(total)} (inkl. ${formatSEK(totalExtra)} i omkostnader)`;
+    el.style.color='#fb923c';
+  } else {
+    el.textContent='';
+  }
+}
+
+function getExtraCosts(){
+  const rows=document.getElementById('extra-costs-list').querySelectorAll('.extra-cost-row');
+  const costs=[];
+  rows.forEach(row=>{
+    const inputs=row.querySelectorAll('input');
+    const desc=inputs[0].value.trim();
+    const amt=parseFloat(inputs[1].value)||0;
+    if(amt>0)costs.push({desc,amount:amt});
+  });
+  return costs;
+}
+
 function setTab(tab){
   ['dashboard','deals','gigs','goal'].forEach(t=>{
     document.getElementById('view-'+t).style.display=t===tab?'block':'none';
     document.getElementById('tab-'+t).classList.toggle('active',t===tab);
   });
-  // Update + button
   const nyBtn=document.getElementById('ny-btn');
   if(tab==='gigs'){nyBtn.textContent='+ Jobb';nyBtn.onclick=openGigForm;}
-  else if(tab==='deals'){nyBtn.textContent='+ Ny';nyBtn.onclick=openForm;}
   else{nyBtn.textContent='+ Ny';nyBtn.onclick=openForm;}
   if(tab==='dashboard')renderDashboard();
   if(tab==='deals')renderDeals();
@@ -466,21 +515,21 @@ function setTab(tab){
   if(tab==='goal')renderGoal();
 }
 
-// DEALS
 function openForm(){
-  editId=null;imgData=null;
+  editId=null;imgData=null;extraCosts=[];
   ['f-name','f-desc','f-buy','f-sell','f-buydate','f-selldate'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-cat').value='Elektronik';
   document.getElementById('f-plat').value='Blocket';
   document.getElementById('f-status').value='Inköpt';
   document.getElementById('img-label').innerHTML='📷 Lägg till bild';
   document.getElementById('form-title').textContent='➕ Ny affär';
+  document.getElementById('extra-costs-list').innerHTML='';
+  document.getElementById('total-cost-display').textContent='';
   document.getElementById('form-wrap').style.display='block';
   setTab('deals');
 }
 function closeForm(){document.getElementById('form-wrap').style.display='none';editId=null;imgData=null;}
 
-// GIGS
 function openGigForm(){
   editGigId=null;gigImgData=null;
   ['g-desc','g-client','g-amount','g-hours','g-date'].forEach(id=>document.getElementById(id).value='');
@@ -506,12 +555,15 @@ function handleImg(e,labelId,type='deal'){
 
 function submitForm(){
   const name=document.getElementById('f-name').value.trim();
-  const buy=parseFloat(document.getElementById('f-buy').value)||0;
   if(!name){showToast('Fyll i objektnamn',false);return;}
+  const buy=parseFloat(document.getElementById('f-buy').value)||0;
+  const costs=getExtraCosts();
+  const totalCost=buy+costs.reduce((s,c)=>s+c.amount,0);
   const status=document.getElementById('f-status').value;
   const sell=document.getElementById('f-sell').value?parseFloat(document.getElementById('f-sell').value):null;
   const deal={
-    id:editId||Date.now().toString(),name,buy,
+    id:editId||Date.now().toString(),name,
+    buy,extraCosts:costs,totalCost,
     desc:document.getElementById('f-desc').value,
     sell,buyDate:document.getElementById('f-buydate').value,
     sellDate:document.getElementById('f-selldate').value,
@@ -524,7 +576,7 @@ function submitForm(){
   else deals=[deal,...deals];
   save();closeForm();renderDeals();renderHeader();
   if(status==='Såld'&&sell!=null){
-    const profit=sell-buy;
+    const profit=sell-totalCost;
     const newTotal=getCombinedTotal();
     setTimeout(()=>{renderDashboard(oldTotal,newTotal);if(profit>0)showWinPopup(profit);},100);
   } else {
@@ -557,17 +609,23 @@ function submitGig(){
 function editDeal(id){
   const d=deals.find(x=>x.id===id);if(!d)return;
   editId=id;imgData=d.img||null;
-  document.getElementById('f-name').value=d.name;
+  document.getElementById('f-name').value=d.name||'';
   document.getElementById('f-desc').value=d.desc||'';
-  document.getElementById('f-buy').value=d.buy;
+  document.getElementById('f-buy').value=d.buy||0;
   document.getElementById('f-sell').value=d.sell||'';
   document.getElementById('f-buydate').value=d.buyDate||'';
   document.getElementById('f-selldate').value=d.sellDate||'';
-  document.getElementById('f-cat').value=d.cat;
-  document.getElementById('f-plat').value=d.plat;
-  document.getElementById('f-status').value=d.status;
+  document.getElementById('f-cat').value=d.cat||'Elektronik';
+  document.getElementById('f-plat').value=d.plat||'Blocket';
+  document.getElementById('f-status').value=d.status||'Inköpt';
   document.getElementById('img-label').innerHTML=d.img?'<img src="'+d.img+'"/>':'📷 Lägg till bild';
   document.getElementById('form-title').textContent='✏️ Redigera affär';
+  // Restore extra costs
+  document.getElementById('extra-costs-list').innerHTML='';
+  if(d.extraCosts&&d.extraCosts.length){
+    d.extraCosts.forEach(c=>addCostRow(c.desc,c.amount));
+  }
+  updateTotalCost();
   document.getElementById('form-wrap').style.display='block';
   setTab('deals');
 }
@@ -575,13 +633,13 @@ function editDeal(id){
 function editGig(id){
   const g=gigs.find(x=>x.id===id);if(!g)return;
   editGigId=id;gigImgData=g.img||null;
-  document.getElementById('g-desc').value=g.desc;
+  document.getElementById('g-desc').value=g.desc||'';
   document.getElementById('g-client').value=g.client||'';
-  document.getElementById('g-type').value=g.type;
-  document.getElementById('g-amount').value=g.amount;
+  document.getElementById('g-type').value=g.type||'Teknisk hjälp';
+  document.getElementById('g-amount').value=g.amount||'';
   document.getElementById('g-hours').value=g.hours||'';
   document.getElementById('g-date').value=g.date||'';
-  document.getElementById('g-paid').value=g.paid;
+  document.getElementById('g-paid').value=g.paid||'Betald';
   document.getElementById('gig-img-label').innerHTML=g.img?'<img src="'+g.img+'"/>':'📷 Lägg till bild';
   document.getElementById('gig-form-title').textContent='✏️ Redigera jobb';
   document.getElementById('gig-form-wrap').style.display='block';
@@ -592,15 +650,14 @@ function setFilter(f,el){currentFilter=f;document.querySelectorAll('#view-deals 
 function setGigFilter(f,el){currentGigFilter=f;document.querySelectorAll('#view-gigs .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');renderGigs();}
 
 function getCombinedTotal(){
-  const flipTotal=deals.filter(d=>d.status==='Såld'&&d.sell!=null).reduce((s,d)=>s+(d.sell-d.buy),0);
+  const flipTotal=deals.filter(d=>d.status==='Såld'&&d.sell!=null).reduce((s,d)=>s+(d.sell-(d.totalCost||d.buy)),0);
   const gigTotal=gigs.filter(g=>g.paid==='Betald').reduce((s,g)=>s+g.amount,0);
   return flipTotal+gigTotal;
 }
 
 function renderHeader(){
   const active=deals.filter(d=>d.status==='Inköpt').length;
-  const gigCount=gigs.length;
-  document.getElementById('hdr-sub').textContent=deals.length+' affärer · '+active+' aktiva · '+gigCount+' jobb';
+  document.getElementById('hdr-sub').textContent=deals.length+' affärer · '+active+' aktiva · '+gigs.length+' jobb';
 }
 
 function renderDeals(){
@@ -612,12 +669,16 @@ function renderDeals(){
   const filtered=currentFilter==='Alla'?deals:deals.filter(d=>d.status===currentFilter);
   document.getElementById('empty-deals').style.display=filtered.length?'none':'block';
   document.getElementById('deal-list').innerHTML=filtered.map(d=>{
-    const profit=d.sell!=null?d.sell-d.buy:null;
-    const roi=profit!=null&&d.buy>0?(profit/d.buy*100).toFixed(0):null;
-    const profitStr=profit!=null?`<span class="${profit>=0?'green':'red'}" style="font-weight:700">${profit>=0?'+':''}${formatSEK(profit)}${roi?' ('+roi+'%)':' (gratis!)'}</span>`:'';
+    const totalCost=d.totalCost||d.buy;
+    const profit=d.sell!=null?d.sell-totalCost:null;
+    const roi=profit!=null&&totalCost>0?(profit/totalCost*100).toFixed(0):null;
+    const hasExtra=d.extraCosts&&d.extraCosts.length>0;
+    const profitStr=profit!=null?`<span class="${profit>=0?'green':'red'}" style="font-weight:700">${profit>=0?'+':''}${formatSEK(profit)}${roi?' ('+roi+'%)':''}</span>`:'';
     const sellStr=d.sell!=null?`<span class="muted">Sålt: <b class="white">${formatSEK(d.sell)}</b></span>`:'';
+    const buyStr=`<span class="muted">Köpt: <b class="white">${totalCost>0?formatSEK(totalCost):'Gratis'}</b>${hasExtra?` <span style="color:#fb923c;font-size:9px">(+omkostn.)</span>`:''}</span>`;
     const img=d.img?`<img class="deal-img" src="${d.img}"/>`:'<div class="deal-ph">📦</div>';
-    return`<div class="deal-card">${img}<div class="deal-info"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px"><div class="deal-name">${d.name}</div><span class="badge ${d.status==='Såld'?'badge-sold':'badge-active'}">${d.status}</span></div><div class="deal-meta">${d.cat} · ${d.plat}</div><div class="deal-prices"><span class="muted">Köpt: <b class="white">${d.buy>0?formatSEK(d.buy):'Gratis'}</b></span>${sellStr}${profitStr}</div></div><div class="deal-actions"><button class="icon-btn" onclick="editDeal('${d.id}')">✏️</button><button class="icon-btn" style="color:#f87171" onclick="confirmDelete('${d.id}','${d.name.replace(/'/g,"\\'")}','deal')">🗑</button></div></div>`;
+    const safeId=d.id;
+    return`<div class="deal-card">${img}<div class="deal-info"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px"><div class="deal-name">${d.name}</div><span class="badge ${d.status==='Såld'?'badge-sold':'badge-active'}">${d.status}</span></div><div class="deal-meta">${d.cat} · ${d.plat}</div><div class="deal-prices">${buyStr}${sellStr}${profitStr}</div></div><div class="deal-actions"><button class="icon-btn" onclick="editDeal('${safeId}')">✏️</button><button class="icon-btn" style="color:#f87171" onclick="confirmDelete('${safeId}','${d.name.replace(/['"]/g,'_')}','deal')">🗑</button></div></div>`;
   }).join('');
 }
 
@@ -641,19 +702,18 @@ function renderGigs(){
   document.getElementById('gig-list').innerHTML=filtered.map(g=>{
     const hourly=g.hours&&g.hours>0?formatSEK(Math.round(g.amount/g.hours))+'/h':null;
     const img=g.img?`<img class="deal-img" src="${g.img}"/>`:'<div class="deal-ph">🔧</div>';
-    return`<div class="deal-card">${img}<div class="deal-info"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px"><div class="deal-name">${g.desc}</div><span class="badge ${g.paid==='Betald'?'badge-paid':'badge-unpaid'}">${g.paid}</span></div><div class="deal-meta">${g.type}${g.client?' · '+g.client:''}</div><div class="deal-prices"><span class="green" style="font-weight:700">${formatSEK(g.amount)}</span>${g.hours?`<span class="muted">${g.hours}h</span>`:''}${hourly?`<span class="purple">${hourly}</span>`:''}</div></div><div class="deal-actions"><button class="icon-btn" onclick="editGig('${g.id}')">✏️</button><button class="icon-btn" style="color:#f87171" onclick="confirmDelete('${g.id}','${g.desc.replace(/'/g,"\\'")}','gig')">🗑</button></div></div>`;
+    return`<div class="deal-card">${img}<div class="deal-info"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px"><div class="deal-name">${g.desc}</div><span class="badge ${g.paid==='Betald'?'badge-paid':'badge-unpaid'}">${g.paid}</span></div><div class="deal-meta">${g.type}${g.client?' · '+g.client:''}</div><div class="deal-prices"><span class="green" style="font-weight:700">${formatSEK(g.amount)}</span>${g.hours?`<span class="muted">${g.hours}h</span>`:''} ${hourly?`<span class="purple">${hourly}</span>`:''}</div></div><div class="deal-actions"><button class="icon-btn" onclick="editGig('${g.id}')">✏️</button><button class="icon-btn" style="color:#f87171" onclick="confirmDelete('${g.id}','${g.desc.replace(/['"]/g,'_')}','gig')">🗑</button></div></div>`;
   }).join('');
 }
 
 function renderDashboard(fromTotal,toTotal){
   const sold=deals.filter(d=>d.status==='Såld'&&d.sell!=null);
   const active=deals.filter(d=>d.status==='Inköpt');
-  const flipTotal=sold.reduce((s,d)=>s+(d.sell-d.buy),0);
+  const flipTotal=sold.reduce((s,d)=>s+(d.sell-(d.totalCost||d.buy)),0);
   const gigTotal=gigs.filter(g=>g.paid==='Betald').reduce((s,g)=>s+g.amount,0);
   const combined=flipTotal+gigTotal;
-  const soldWithBuy=sold.filter(d=>d.buy>0);
-  const roi=soldWithBuy.length?soldWithBuy.reduce((s,d)=>s+((d.sell-d.buy)/d.buy*100),0)/soldWithBuy.length:0;
-  document.getElementById('s-total').className='stat-value '+(combined>=0?'green':'red');
+  const soldWithCost=sold.filter(d=>(d.totalCost||d.buy)>0);
+  const roi=soldWithCost.length?soldWithCost.reduce((s,d)=>s+((d.sell-(d.totalCost||d.buy))/(d.totalCost||d.buy)*100),0)/soldWithCost.length:0;
   document.getElementById('s-active').textContent=active.length+' pågående';
   document.getElementById('s-gig-count').textContent=gigs.length+' jobb';
   document.getElementById('empty-dash').style.display=(deals.length+gigs.length)?'none':'block';
@@ -663,35 +723,32 @@ function renderDashboard(fromTotal,toTotal){
   document.getElementById('s-gig').textContent=formatSEK(gigTotal);
   document.getElementById('s-roi').textContent=roi.toFixed(0)+'%';
 
-  // Best month (combined)
   const monthMap={};
-  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-d.buy);});
+  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-(d.totalCost||d.buy));});
   gigs.filter(g=>g.paid==='Betald').forEach(g=>{const k=g.date?g.date.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+g.amount;});
   const months=Object.entries(monthMap).sort(([,a],[,b])=>b-a);
   if(months.length){
     document.getElementById('best-month-card').style.display='block';
     const [bm,bv]=months[0];
-    document.getElementById('best-month-content').innerHTML=`<span style="font-weight:700;font-size:var(--font-md)">${bm}</span> <span class="green" style="font-weight:700">${formatSEK(bv)}</span>`;
+    document.getElementById('best-month-content').innerHTML=`<span style="font-weight:700">${bm}</span> — <span class="green" style="font-weight:700">${formatSEK(bv)}</span>`;
   }
-
   if(sold.length){
-    const best=sold.reduce((a,b)=>(b.sell-b.buy)>(a.sell-a.buy)?b:a);
+    const best=sold.reduce((a,b)=>(b.sell-(b.totalCost||b.buy))>(a.sell-(a.totalCost||a.buy))?b:a);
     document.getElementById('best-card').style.display='block';
     document.getElementById('best-name').textContent=best.name;
-    const bp=best.sell-best.buy;
-    document.getElementById('best-profit').textContent='+'+formatSEK(bp)+(best.buy>0?' · '+(bp/best.buy*100).toFixed(0)+'% ROI':'');
-    document.getElementById('best-img').innerHTML=best.img?`<img src="${best.img}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0"/>`:'<div style="width:48px;height:48px;border-radius:8px;background:#222236;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📦</div>';
+    const bp=best.sell-(best.totalCost||best.buy);
+    const bc=best.totalCost||best.buy;
+    document.getElementById('best-profit').textContent='+'+formatSEK(bp)+(bc>0?' · '+(bp/bc*100).toFixed(0)+'% ROI':'');
+    document.getElementById('best-img').innerHTML=best.img?`<img src="${best.img}" style="width:48px;height:48px;border-radius:8px;object-fit:cover"/>`:'<div style="width:48px;height:48px;border-radius:8px;background:#222236;display:flex;align-items:center;justify-content:center;font-size:22px">📦</div>';
   }
-
-  const chartMonths=Object.entries(monthMap).sort(([a],[b])=>a.localeCompare(b)).slice(-6);
-  if(chartMonths.length){
+  const chartData=Object.entries(monthMap).sort(([a],[b])=>a.localeCompare(b)).slice(-6);
+  if(chartData.length){
     document.getElementById('chart-card').style.display='block';
-    const maxV=Math.max(...chartMonths.map(([,v])=>v),1);
-    document.getElementById('chart').innerHTML=chartMonths.map(([m,v])=>`<div class="bar-wrap"><div style="font-size:9px;color:#4ade80">${Math.round(v).toLocaleString('sv-SE')}</div><div class="bar" style="height:${Math.max(v/maxV*55,4)}px;background:#7c6fff"></div><div style="font-size:9px;color:#666">${m.slice(5)}/${m.slice(2,4)}</div></div>`).join('');
+    const maxV=Math.max(...chartData.map(([,v])=>v),1);
+    document.getElementById('chart').innerHTML=chartData.map(([m,v])=>`<div class="bar-wrap"><div style="font-size:9px;color:#4ade80">${Math.round(v).toLocaleString('sv-SE')}</div><div class="bar" style="height:${Math.max(v/maxV*55,4)}px;background:#7c6fff"></div><div style="font-size:9px;color:#666">${m.slice(5)}/${m.slice(2,4)}</div></div>`).join('');
   }
-
   if(sold.length){
-    const pm={};sold.forEach(d=>{pm[d.plat]=(pm[d.plat]||0)+(d.sell-d.buy);});
+    const pm={};sold.forEach(d=>{pm[d.plat]=(pm[d.plat]||0)+(d.sell-(d.totalCost||d.buy));});
     document.getElementById('platform-card').style.display='block';
     document.getElementById('platform-list').innerHTML=Object.entries(pm).sort(([,a],[,b])=>b-a).map(([p,v])=>`<div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:var(--font-sm)"><span class="muted">${p}</span><span class="green" style="font-weight:700">${formatSEK(v)}</span></div>`).join('');
   }
@@ -714,75 +771,63 @@ function renderGoal(){
   document.getElementById('g-days').textContent=daysLeft+' dagar kvar';
   const teslaPos=Math.max(2,Math.min(pct,95));
   setTimeout(()=>{document.getElementById('tesla-car').style.left=teslaPos+'%';document.getElementById('tesla-road').style.width=teslaPos+'%';},300);
-
-  // Monthly average
   const monthMap={};
   const sold=deals.filter(d=>d.status==='Såld'&&d.sell!=null);
-  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-d.buy);});
+  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-(d.totalCost||d.buy));});
   gigs.filter(g=>g.paid==='Betald').forEach(g=>{const k=g.date?g.date.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+g.amount;});
   const months=Object.values(monthMap);
   const curMonthly=months.length?months.reduce((a,b)=>a+b,0)/months.length:0;
   const required=monthsLeft>0?remaining/monthsLeft:0;
   document.getElementById('g-per-month').textContent=formatSEK(Math.round(required));
   document.getElementById('g-cur-month').textContent=formatSEK(Math.round(curMonthly));
-
-  // ETA
   if(curMonthly>0&&remaining>0){
     const etaMonths=Math.ceil(remaining/curMonthly);
     const etaDate=new Date();etaDate.setMonth(etaDate.getMonth()+etaMonths);
-    const etaStr=etaDate.toLocaleDateString('sv-SE',{year:'numeric',month:'long'});
-    document.getElementById('g-eta').textContent=`~${etaMonths} mån (${etaStr})`;
-  } else if(remaining<=0){
-    document.getElementById('g-eta').textContent='Nu! 🎉';
+    document.getElementById('g-eta').textContent=`~${etaMonths} mån (${etaDate.toLocaleDateString('sv-SE',{year:'numeric',month:'long'})})`;
   } else {
-    document.getElementById('g-eta').textContent='–';
+    document.getElementById('g-eta').textContent=remaining<=0?'Nu! 🎉':'–';
   }
-
   const diff=curMonthly-required;
   const diffStr=formatSEK(Math.abs(Math.round(diff)));
   let trackMsg='';
-  if(!curMonthly){trackMsg='<span class="muted">Lägg till sålda affärer för att se progress</span>';}
-  else if(diff>=5000){trackMsg=`<span class="on-track">🚀 Du ligger ${diffStr} före planen!</span>`;}
-  else if(diff>=2000){trackMsg=`<span class="on-track">✅ ${diffStr} före schemat!</span>`;}
-  else if(diff>=0){trackMsg='<span class="on-track">✅ Du är på rätt spår!</span>';}
-  else if(diff>=-2000){trackMsg=`<span class="off-track">📈 Nästan — bara ${diffStr} efter</span>`;}
-  else{trackMsg=`<span class="off-track">💪 ${diffStr} efter — hitta nästa deal!</span>`;}
+  if(!curMonthly)trackMsg='<span class="muted">Lägg till sålda affärer för att se progress</span>';
+  else if(diff>=5000)trackMsg=`<span class="on-track">🚀 Du ligger ${diffStr} före planen!</span>`;
+  else if(diff>=2000)trackMsg=`<span class="on-track">✅ ${diffStr} före schemat!</span>`;
+  else if(diff>=0)trackMsg='<span class="on-track">✅ Du är på rätt spår!</span>';
+  else if(diff>=-2000)trackMsg=`<span class="off-track">📈 Nästan — bara ${diffStr} efter</span>`;
+  else trackMsg=`<span class="off-track">💪 ${diffStr} efter — hitta nästa deal!</span>`;
   document.getElementById('g-track').innerHTML=trackMsg;
-
   const milestones=[
-    {amt:500,  icon:'🔌', label:'Samsung USB-C laddare 25W',        desc:'Elgiganten ~499 kr'},
-    {amt:1500, icon:'🎮', label:'Xbox trådlös handkontroll',         desc:'Elgiganten ~1 499 kr'},
-    {amt:2500, icon:'🎧', label:'JBL Tune 510BT hörlurar',           desc:'Elgiganten ~2 490 kr'},
-    {amt:4000, icon:'⌚', label:'Samsung Galaxy Watch FE',            desc:'Elgiganten ~3 990 kr'},
-    {amt:5000, icon:'🚗', label:'Skrotbil! Volvo 244 -89',           desc:'Blocket ~4 000–6 000 kr'},
-    {amt:8000, icon:'🎧', label:'Sony WH-1000XM5 hörlurar',          desc:'Elgiganten ~7 990 kr'},
-    {amt:12000,icon:'🚗', label:'Toyota Yaris 2003, ca 20 000 mil',  desc:'Blocket ~10 000–13 000 kr'},
-    {amt:15000,icon:'📱', label:'Samsung Galaxy S25',                 desc:'Elgiganten ~14 990 kr'},
-    {amt:20000,icon:'🚗', label:'VW Golf 2009, ca 15 000 mil',       desc:'Wayke ~18 000–22 000 kr'},
-    {amt:25000,icon:'📺', label:'Samsung 55" QLED TV',               desc:'Elgiganten ~24 990 kr'},
-    {amt:35000,icon:'🚗', label:'Volvo V60 2013, ca 15 000 mil',     desc:'Wayke ~33 000–38 000 kr'},
-    {amt:50000,icon:'🚙', label:'VW Passat 2015, ca 12 000 mil',     desc:'Wayke ~48 000–55 000 kr'},
-    {amt:65000,icon:'🚙', label:'Volvo XC60 2015, ca 10 000 mil',    desc:'Wayke ~62 000–68 000 kr'},
-    {amt:80000,icon:'🚙', label:'BMW 3-serie 2017, ca 9 000 mil',    desc:'Wayke ~78 000–85 000 kr'},
-    {amt:100000,icon:'🏁',label:'Halvvägs! 100 000 kr total',        desc:'Bra jobbat Douglas! 🎉'},
-    {amt:120000,icon:'⚡',label:'Polestar 2 2021, ca 12 000 mil',    desc:'Wayke ~115 000–125 000 kr'},
-    {amt:150000,icon:'⚡',label:'Tesla Model 3 2019, ca 20 000 mil', desc:'Wayke ~145 000–160 000 kr'},
-    {amt:175000,icon:'🚗',label:'Tesla Model 3 2021, ca 14 000 mil', desc:'Wayke ~165 000–175 000 kr'},
-    {amt:200000,icon:'🎂',label:'MÅLET! Tesla Model Y 2023!',        desc:'200 000 kr + 150 000 kr bil = 350 000 kr!'},
+    {amt:500,  icon:'🔌',label:'Samsung USB-C laddare 25W',       desc:'Elgiganten ~499 kr'},
+    {amt:1500, icon:'🎮',label:'Xbox trådlös handkontroll',        desc:'Elgiganten ~1 499 kr'},
+    {amt:2500, icon:'🎧',label:'JBL Tune 510BT hörlurar',          desc:'Elgiganten ~2 490 kr'},
+    {amt:4000, icon:'⌚',label:'Samsung Galaxy Watch FE',           desc:'Elgiganten ~3 990 kr'},
+    {amt:5000, icon:'🚗',label:'Skrotbil! Volvo 244 -89',          desc:'Blocket ~4 000–6 000 kr'},
+    {amt:8000, icon:'🎧',label:'Sony WH-1000XM5 hörlurar',         desc:'Elgiganten ~7 990 kr'},
+    {amt:12000,icon:'🚗',label:'Toyota Yaris 2003, ca 20 000 mil', desc:'Blocket ~10 000–13 000 kr'},
+    {amt:15000,icon:'📱',label:'Samsung Galaxy S25',                desc:'Elgiganten ~14 990 kr'},
+    {amt:20000,icon:'🚗',label:'VW Golf 2009, ca 15 000 mil',      desc:'Wayke ~18 000–22 000 kr'},
+    {amt:25000,icon:'📺',label:'Samsung 55" QLED TV',              desc:'Elgiganten ~24 990 kr'},
+    {amt:35000,icon:'🚗',label:'Volvo V60 2013, ca 15 000 mil',    desc:'Wayke ~33 000–38 000 kr'},
+    {amt:50000,icon:'🚙',label:'VW Passat 2015, ca 12 000 mil',    desc:'Wayke ~48 000–55 000 kr'},
+    {amt:65000,icon:'🚙',label:'Volvo XC60 2015, ca 10 000 mil',   desc:'Wayke ~62 000–68 000 kr'},
+    {amt:80000,icon:'🚙',label:'BMW 3-serie 2017, ca 9 000 mil',   desc:'Wayke ~78 000–85 000 kr'},
+    {amt:100000,icon:'🏁',label:'Halvvägs! 100 000 kr total',      desc:'Bra jobbat Douglas! 🎉'},
+    {amt:120000,icon:'⚡',label:'Polestar 2 2021, ca 12 000 mil',  desc:'Wayke ~115 000–125 000 kr'},
+    {amt:150000,icon:'⚡',label:'Tesla Model 3 2019, ca 20 000 mil',desc:'Wayke ~145 000–160 000 kr'},
+    {amt:175000,icon:'🚗',label:'Tesla Model 3 2021, ca 14 000 mil',desc:'Wayke ~165 000–175 000 kr'},
+    {amt:200000,icon:'🎂',label:'MÅLET! Tesla Model Y 2023!',      desc:'200 000 kr + 150 000 kr bil = 350 000 kr!'},
   ];
   document.getElementById('milestones').innerHTML=milestones.map(m=>{
     const reached=combined>=m.amt;
-    return`<div class="milestone-row"><div class="milestone-dot" style="background:${reached?'#4ade80':'#333'}"></div><span style="font-size:18px">${m.icon}</span><div style="flex:1;min-width:0"><div style="color:${reached?'#f0f0f0':'#666'};font-size:var(--font-sm);font-weight:${reached?'700':'400'}">${m.label}</div><div style="color:#555;font-size:10px">${formatSEK(m.amt)} — ${m.desc}</div></div><span style="${reached?'color:#4ade80':'color:#555'}">${reached?'✅':'–'}</span></div>`;
+    return`<div class="milestone-row"><div class="milestone-dot" style="background:${reached?'#4ade80':'#333'}"></div><span style="font-size:18px">${m.icon}</span><div style="flex:1;min-width:0"><div style="color:${reached?'#f0f0f0':'#666'};font-size:var(--font-sm);font-weight:${reached?700:400}">${m.label}</div><div style="color:#555;font-size:10px">${formatSEK(m.amt)} — ${m.desc}</div></div><span style="color:${reached?'#4ade80':'#555'}">${reached?'✅':'–'}</span></div>`;
   }).join('');
   document.getElementById('birthday-countdown').textContent=daysLeft+' dagar kvar till 35-årsdagen! 🎂';
   document.getElementById('ga-amount').value=goalAmount;
   document.getElementById('ga-date').value=goal.date;
 }
 
-function toggleGoalEdit(){
-  const f=document.getElementById('goal-edit-form');
-  f.style.display=f.style.display==='none'?'block':'none';
-}
+function toggleGoalEdit(){const f=document.getElementById('goal-edit-form');f.style.display=f.style.display==='none'?'block':'none';}
 function saveGoal(){
   goal.amount=parseFloat(document.getElementById('ga-amount').value)||200000;
   goal.date=document.getElementById('ga-date').value||'2028-01-28';
@@ -790,8 +835,7 @@ function saveGoal(){
 }
 
 function exportData(){
-  const data={deals,gigs,goal};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({deals,gigs,goal},null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='flip-tracker-'+new Date().toISOString().slice(0,10)+'.json';a.click();
   showToast('Data exporterad!');
@@ -816,7 +860,7 @@ function importData(e){
 function renderSplash(){
   const sold=deals.filter(d=>d.status==='Såld'&&d.sell!=null);
   const active=deals.filter(d=>d.status==='Inköpt');
-  const flipTotal=sold.reduce((s,d)=>s+(d.sell-d.buy),0);
+  const flipTotal=sold.reduce((s,d)=>s+(d.sell-(d.totalCost||d.buy)),0);
   const gigTotal=gigs.filter(g=>g.paid==='Betald').reduce((s,g)=>s+g.amount,0);
   const combined=flipTotal+gigTotal;
   const avg=sold.length?flipTotal/sold.length:0;
@@ -828,7 +872,7 @@ function renderSplash(){
   const remaining=Math.max(goal.amount-combined,0);
   const required=monthsLeft>0?remaining/monthsLeft:0;
   const monthMap={};
-  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-d.buy);});
+  sold.forEach(d=>{const k=d.sellDate?d.sellDate.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+(d.sell-(d.totalCost||d.buy));});
   gigs.filter(g=>g.paid==='Betald').forEach(g=>{const k=g.date?g.date.slice(0,7):null;if(k)monthMap[k]=(monthMap[k]||0)+g.amount;});
   const months=Object.values(monthMap);
   const curMonthly=months.length?months.reduce((a,b)=>a+b,0)/months.length:0;
@@ -840,13 +884,13 @@ function renderSplash(){
   document.getElementById('sp-pct').textContent=pct.toFixed(1)+'%';
   document.getElementById('sp-target').textContent=formatSEK(goal.amount);
   let trackMsg='';
-  if((deals.length+gigs.length)===0){trackMsg='<span class="muted">👋 Lägg till din första affär!</span>';}
-  else if(!curMonthly){trackMsg='<span class="muted">📊 Lägg till sålda affärer</span>';}
-  else if(diff>=5000){trackMsg=`<span class="on-track">🚀 Du ligger ${formatSEK(Math.round(diff))} före planen!</span>`;}
-  else if(diff>=2000){trackMsg=`<span class="on-track">✅ ${formatSEK(Math.round(diff))} före schemat!</span>`;}
-  else if(diff>=0){trackMsg='<span class="on-track">✅ Du är på rätt spår!</span>';}
-  else if(diff>=-2000){trackMsg=`<span class="off-track">📈 Nästan — bara ${formatSEK(Math.abs(Math.round(diff)))} efter</span>`;}
-  else{trackMsg=`<span class="off-track">💪 ${formatSEK(Math.abs(Math.round(diff)))} efter — hitta nästa deal!</span>`;}
+  if((deals.length+gigs.length)===0)trackMsg='<span class="muted">👋 Lägg till din första affär!</span>';
+  else if(!curMonthly)trackMsg='<span class="muted">📊 Lägg till sålda affärer</span>';
+  else if(diff>=5000)trackMsg=`<span class="on-track">🚀 ${formatSEK(Math.round(diff))} före planen!</span>`;
+  else if(diff>=2000)trackMsg=`<span class="on-track">✅ ${formatSEK(Math.round(diff))} före schemat!</span>`;
+  else if(diff>=0)trackMsg='<span class="on-track">✅ Du är på rätt spår!</span>';
+  else if(diff>=-2000)trackMsg=`<span class="off-track">📈 Nästan — ${formatSEK(Math.abs(Math.round(diff)))} efter</span>`;
+  else trackMsg=`<span class="off-track">💪 ${formatSEK(Math.abs(Math.round(diff)))} efter — hitta nästa deal!</span>`;
   document.getElementById('sp-track').innerHTML=trackMsg;
   setTimeout(()=>document.getElementById('sp-bar').style.width=pct+'%',200);
   setTimeout(()=>{document.getElementById('splash').classList.add('hide');setTimeout(()=>document.getElementById('splash').style.display='none',500);},3000);
