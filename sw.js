@@ -1,4 +1,4 @@
-const CACHE = 'flip-v5';
+const CACHE = 'flip-v6';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
